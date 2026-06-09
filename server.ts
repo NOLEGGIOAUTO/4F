@@ -216,8 +216,27 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     console.log(`[Server] Starting in Production mode. Serving static assets from ${distPath}`);
+    
+    // Serve static assets from the compiled production dist directory
     app.use(express.static(distPath));
+    
+    // Fallback: Also serve raw public folder assets directly in case the build/compile copy was partial or stale
+    const publicPath = path.join(process.cwd(), "public");
+    console.log(`[Server] Registering fallback public static folder: ${publicPath}`);
+    app.use(express.static(publicPath));
+    
     app.get("*", (req, res) => {
+      // Prevent asset requests from falling back to serving index.html
+      const ext = path.extname(req.path).toLowerCase();
+      const assetExtensions = [
+        '.png', '.webp', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.css', '.js',
+        '.json', '.xml', '.txt', '.woff', '.woff2', '.ttf', '.eot'
+      ];
+      if (assetExtensions.includes(ext) || req.path.startsWith('/images/')) {
+        console.warn(`[Server 404] Static asset not found: ${req.path}`);
+        return res.status(404).send(`Asset not found: ${req.path}`);
+      }
+      
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

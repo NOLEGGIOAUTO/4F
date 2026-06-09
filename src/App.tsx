@@ -261,6 +261,19 @@ const FAQ_ITEMS = [
 ];
 
 export default function App() {
+  const heroCandidates = [
+    "/images/fiat-panda-hero.png",
+    "/fiat-panda-hero.png",
+    "/images/fiat-panda-hero.webp",
+    "/fiat-panda-hero.webp",
+    "/images/fiat-panda.png",
+    "/fiat-panda.png",
+    "/images/fiat-panda.webp",
+    "/fiat-panda.webp",
+    "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=800"
+  ];
+  const [heroIndex, setHeroIndex] = useState(0);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Tutti");
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -604,12 +617,14 @@ export default function App() {
               }}
               className="w-full overflow-visible"
             >
-              <img 
-                src="/images/fiat-panda-hero.png" 
+               <img 
+                src={heroCandidates[heroIndex]} 
                 alt="Fiat Panda" 
                 className="w-full max-h-[380px] lg:max-h-[420px] object-contain transform lg:scale-105 pointer-events-none drop-shadow-[0_25px_35px_rgba(0,0,0,0.18)]"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/fiat-panda.webp";
+                onError={() => {
+                  if (heroIndex < heroCandidates.length - 1) {
+                    setHeroIndex(prev => prev + 1);
+                  }
                 }}
               />
             </motion.div>
