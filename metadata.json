@@ -1,0 +1,6 @@
+{
+  "name": "Noleggio Auto In Roma",
+  "description": "Servizio di noleggio auto e furgoni a Roma, anche senza carta di credito. Replica del design basata su mockup fornito.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
